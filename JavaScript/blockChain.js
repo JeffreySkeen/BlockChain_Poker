@@ -1,5 +1,9 @@
 const _SHA256 = require('crypto-js/sha256');
-const DIFFICULTY = 5;
+const DIFFICULTY = 1;
+const _CRYPTO = require('crypto')
+
+const prime_length = 60;
+
 
 class Block {
     constructor(TImeStamp, data) 
@@ -68,6 +72,15 @@ class BlockChain {
 }// blockchain
 
 
+class Wallet{
+    constructor(){
+        const diffHell = _CRYPTO.createDiffieHellman(prime_length);
+        diffHell.generateKeys('hex');
+        this.PublicKey = diffHell.getPublicKey('hex');
+        this.PrivateKey = diffHell.getPrivateKey('hex');
+    }
+}
+
 //#region populate and test blockchain
 let mainChain = new BlockChain();
 
@@ -93,3 +106,13 @@ function addBlocks(numberBlocksToAdd){
 addBlocks(5);
 console.log("is chain valid  " + mainChain.checkValid());
 //#endregion
+
+console.log("\n\n");
+
+var wall = new Wallet()
+console.log("public key ==> ", wall.PublicKey);
+console.log("private key ===> ", wall.PrivateKey);
+
+var walll = new Wallet()
+console.log("public key ==> ", walll.PublicKey);
+console.log("private key ===> ", walll.PrivateKey);
