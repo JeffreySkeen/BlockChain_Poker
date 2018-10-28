@@ -1,4 +1,5 @@
 const _SHA256 = require('crypto-js/sha256');
+const DIFFICULTY = 5;
 
 class Block {
     constructor(TImeStamp, data) 
@@ -19,9 +20,14 @@ class Block {
             + this.nonce).toString();
     }
 
-    mineBlock() {
+    mineBlock(difficulty) {
+        while(this.hash.substring(0,difficulty) !== Array(difficulty + 1).join("0")){
+            this.nonce++;
+            this.hash = this.calculateHash();
+        }
 
-    }
+        console.log("BLOCK MINED!!");
+   }
 }
 
 class BlockChain {
@@ -65,14 +71,6 @@ class BlockChain {
 //#region populate and test blockchain
 let mainChain = new BlockChain();
 
-function wait(ms){
-    var start = new Date().getTime();
-    var end = start;
-    while(end < start + ms) {
-      end = new Date().getTime();
-   }
- }
-
 function addBlocks(numberBlocksToAdd){
     var j = 0;
 
@@ -82,12 +80,13 @@ function addBlocks(numberBlocksToAdd){
         let blockToAdd = new Block(date.toUTCString(), {amount: rdmAmount});
         mainChain.addBlock(blockToAdd);
 
+        blockToAdd.mineBlock(DIFFICULTY);
+
         console.log("block " + j + "\t hash is => \t\t" + blockToAdd.hash 
         + "\n\t previous hash is => \t" + blockToAdd.prevHash 
         + "\n\t at index =>\t\t" + mainChain.latestBlock().index);
-        console.log("\n");
 
-        wait(1000);
+        console.log("\n");
     }
 }
 
