@@ -1,6 +1,19 @@
-console.log("test");
-function nodeTest(){
-    console.log("node test");
+class Block{
+    constructor(TImeStamp, data)
+    {
+        this.index = 0;
+        this.TImeStamp = TImeStamp;
+        this.data = data;
+        this.prevHash = "0";
+        this.hash = calculateHash();
+        this.nonce = 0;
+    }
+
+    calculateHash(){
+
+    }
+
+    mineBlock(){
+        
+    }
 }
-nodeTest();
-/* added tis code just to get used to using git */
