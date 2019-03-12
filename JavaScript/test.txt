@@ -1,6 +1,1 @@
-<<<<<<< HEAD
-hello this is a test
-=======
-hello this is a test
-more testsa
->>>>>>> BlockChainFeatures
+Hello this is a test
