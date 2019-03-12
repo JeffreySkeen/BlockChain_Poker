@@ -1,4 +1,9 @@
 const _SHA256 = require('crypto-js/sha256');
+const DIFFICULTY = 1;
+const _CRYPTO = require('crypto')
+
+const prime_length = 60;
+
 
 class Block {
     constructor(TImeStamp, data) 
@@ -19,9 +24,14 @@ class Block {
             + this.nonce).toString();
     }
 
-    mineBlock() {
+    mineBlock(difficulty) {
+        while(this.hash.substring(0,difficulty) !== Array(difficulty + 1).join("0")){
+            this.nonce++;
+            this.hash = this.calculateHash();
+        }
 
-    }
+        console.log("BLOCK MINED!!");
+   }
 }
 
 class BlockChain {
@@ -62,16 +72,17 @@ class BlockChain {
 }// blockchain
 
 
+class Wallet{
+    constructor(){
+        const diffHell = _CRYPTO.createDiffieHellman(prime_length);
+        diffHell.generateKeys('hex');
+        this.PublicKey = diffHell.getPublicKey('hex');
+        this.PrivateKey = diffHell.getPrivateKey('hex');
+    }
+}
+
 //#region populate and test blockchain
 let mainChain = new BlockChain();
-
-function wait(ms){
-    var start = new Date().getTime();
-    var end = start;
-    while(end < start + ms) {
-      end = new Date().getTime();
-   }
- }
 
 function addBlocks(numberBlocksToAdd){
     var j = 0;
@@ -82,15 +93,26 @@ function addBlocks(numberBlocksToAdd){
         let blockToAdd = new Block(date.toUTCString(), {amount: rdmAmount});
         mainChain.addBlock(blockToAdd);
 
+        blockToAdd.mineBlock(DIFFICULTY);
+
         console.log("block " + j + "\t hash is => \t\t" + blockToAdd.hash 
         + "\n\t previous hash is => \t" + blockToAdd.prevHash 
         + "\n\t at index =>\t\t" + mainChain.latestBlock().index);
-        console.log("\n");
 
-        wait(1000);
+        console.log("\n");
     }
 }
 
 addBlocks(5);
 console.log("is chain valid  " + mainChain.checkValid());
 //#endregion
+
+console.log("\n\n");
+
+var wall = new Wallet()
+console.log("public key ==> ", wall.PublicKey);
+console.log("private key ===> ", wall.PrivateKey);
+
+var walll = new Wallet()
+console.log("public key ==> ", walll.PublicKey);
+console.log("private key ===> ", walll.PrivateKey);
